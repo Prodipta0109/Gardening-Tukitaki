@@ -1,0 +1,56 @@
+    <!-- Header -->
+    <header class="">
+        <nav class="navbar navbar-expand-lg">
+          <div class="container-fluid">
+            <div class="collapse navbar-collapse" id="navbarResponsive">
+              <ul class="navbar-nav ml">
+                <li class="nav-item">
+                  <a class="nav-link" href="about.html">Buy Plants</a>
+                </li>
+                  <a class="nav-link" href="post-details.html">Sell Plants</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="contact.html">Gardening Calculator</a>
+                </li>
+              </ul>
+            </div>
+
+            <a class="navbar-brand text-info" href="index.html"><h1>Gardening Tukitaki<br></h1> <p class="text-success"><h7>Now green is in your own hands</h7></p></a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+              <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarResponsive">
+              <ul class="navbar-nav ml-auto">
+                <li class="nav-item">
+                  <a class="nav-link" href="{% url 'home' %}"> Home</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="about.html">About Us</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="{% url 'blogs' %}">Blogs</a>
+                </li>
+                {% if request.user.is_authenticated %}
+                <li class="nav-item dropdown">
+                  <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    Profile
+                  </a>
+                  <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                    
+                    <a class="dropdown-item" href="#">My Profile</a>
+                    <a class="dropdown-item" href="#">Notification
+                    </a>
+                    <a class="dropdown-item" href="{% url 'logout' %}">Logout</a>
+                   
+                  </div>
+                </li>
+                {% else %}
+                <li class="nav-item">
+                  <a class="nav-link" href="{% url 'login' %}">Login</a>
+                </li>
+                {% endif  %}
+              </ul>
+            </div>
+          </div>
+        </nav>
+      </header>
