@@ -10,7 +10,7 @@
                   <a class="nav-link" href="post-details.html">Sell Plants</a>
                 </li>
                 <li class="nav-item">
-                  <a class="nav-link" href="contact.html">Gardening Calculator</a>
+                  <a class="nav-link" href="{% url 'gardening_calculator' %}">Gardening Calculator </a>
                 </li>
               </ul>
             </div>
@@ -28,7 +28,7 @@
                   <a class="nav-link" href="about.html">About Us</a>
                 </li>
                 <li class="nav-item">
-                  <a class="nav-link" href="{% url 'blogs' %}">Blogs</a>
+                  <a class="nav-link" href="{% url 'blogs' %}">Blogs Posts</a>
                 </li>
                 {% if request.user.is_authenticated %}
                 <li class="nav-item dropdown">

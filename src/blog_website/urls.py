@@ -22,6 +22,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('blog.urls')),
     path('', include('user_profile.urls')),
+    path('', include('gardening_calculator.urls')),
 #    path('', home, name='home'),
 #     path('blogs/', blogs, name='blogs'),
 #     path('category_blogs/<str:slug>/', category_blogs, name='category_blogs'),

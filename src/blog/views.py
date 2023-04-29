@@ -13,6 +13,7 @@ from .models import (
 from .forms import TextForm
 # Create your views here.
 
+
 def home(request):
     blogs = Blog.objects.order_by('-created_date')
     tags = Tag.objects.order_by('-created_date')

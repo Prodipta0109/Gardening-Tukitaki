@@ -35,6 +35,7 @@ INSTALLED_APPS = [
 #my apps
     'blog',
     'user_profile',
+    'gardening_calculator',
 
 
 #pre installed apps

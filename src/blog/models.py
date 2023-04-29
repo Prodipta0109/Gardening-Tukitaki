@@ -46,7 +46,7 @@ class Blog(models.Model):
         related_name='tag_blogs',
         blank=True
     )
-    likes = models.ManyToManyField(
+    likes = models.ManyToManyField( 
         User,
         related_name='user_likes',
         blank=True
