@@ -1,0 +1,16 @@
+{
+    "[python]": {
+        "editor.formatOnType": true,
+    },
+    "editor.fontSize": 22,
+    "files.autoSave": "afterDelay",
+    "git.autofetch": true,
+    "git.confirmSync": false,
+    "explorer.confirmDelete": false,
+    "workbench.colorTheme": "Atom One Dark",
+    "auto-rename-tag.activationOnLanguage": [
+
+       "html", "xml", "php", "javascript"
+    ],
+    "editor.linkedEditing": true
+}
