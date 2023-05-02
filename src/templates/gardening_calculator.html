@@ -6,28 +6,113 @@
 {%block content%}
 
 
-<h3 align='center'> It is a gardening calculator </h3>
-
-<div class="col-lg-4">
-    <div class="sidebar">
-      <div class="row">
-        <div class="col-lg-12">
-            <div class="sidebar-item categories">
-              <div class="sidebar-heading">
-                <h2>Categories</h2>
-              </div>
-              <div class="content">
-                <ul>
+<section>
+  <style>
+		#container {
+			align-items: center;
+			justify-content: center;
+			text-align: center;
+			width: 75%;
+			height: 100%;
+		}
+	</style>
+</head>
+<body onload="showFertilizerCalculator()">
+  <body onload="showFertilizerCalculator()">
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-lg-2">
+        <div class="sidebar">
+          <div class="row">
+            <div class="col-lg-12">
+              <div class="sidebar-item categories">
+                <div class="sidebar-heading">
+                  <h2>Categories</h2>
+                </div>
+                <div class="content">
+                  <ul>
                   {% for category in categories %}
-                  <li><a href="{% url 'category_blogs' category.slug %}">- {{category.title}}</a></li>
+                    <li><a href="{% url 'category_blogs' category.slug %}">- {{category.title}}</a></li>
                   {% endfor %}
-                </ul>
+                  </ul>
+                </div>
               </div>
             </div>
           </div>
+        </div>
       </div>
+      
+      <div id='container'>
+        
+        <h3 align> Welcome to The Gardening Calculator </h3>
+        <p align>Please choose one of the following calculators:</p>
+	      <button onclick="showFertilizerCalculator()">Fertilizer Calculator</button>
+	      <button onclick="showPHMeterCalculator()">pH Meter Calculator</button>
+
+	      <div id="calculatorContainer"></div>
+
+	    <script>
+		    function showFertilizerCalculator() {
+			  document.getElementById("calculatorContainer").innerHTML = "<h5>Now you are showing a Fertilizer Calculator</h5>";
+		    }
+
+		    function showPHMeterCalculator() {
+          document.getElementById("calculatorContainer").innerHTML = "<h2>It is a pH Meter Calculator</h2><h6> Please use a ph Meter and put it into your soil and see the result value on the screen</h6><label for='phValue'>Enter pH value (0-14): </label><input type='text' id='phValue' name='phValue'><button onclick='calculatePH()'>Calculate</button><p id='result'></p>";
+        }
+
+        function calculatePH() {
+          var pH = parseFloat(document.getElementById("phValue").value);
+  
+          if (isNaN(pH) || pH < 0 || pH > 14) {
+            alert("Please enter a pH value between 0 and 14.");
+            return;
+          }
+          else if (pH > 5.5 && pH <= 6.5) {
+            document.getElementById("result").innerHTML = "pH value is close to neutral. Optimum for many acid-sensitive plants. Some trace elements may become unavailable.";
+          } else if (pH > 5 && pH <= 5.5) {
+            document.getElementById("result").innerHTML = "pH value is slightly acid. Optimal balance of major nutrients and trace elements available for plant uptake.";
+          } else if (pH > 4.5 && pH <= 5) {
+            document.getElementById("result").innerHTML = "pH value is moderately acid. Below pH 4.8 aluminium (Al) can become toxic to plants, depending on soil type. Phosphorus combines with Al and may be less available to plants.";
+          } else if (pH > 4 && pH <= 4.5) {
+            document.getElementById("result").innerHTML = "pH value is strongly acid. Aluminium becomes soluble in toxic quantities. Manganese (Mn) becomes soluble and toxic to plants in some soils, depending on temperature and moisture conditions. Molybdenum (Mo) is less available. Soil bacterial activity is slowed down.";
+          } else {
+            document.getElementById("result").innerHTML = "pH value is extremely acid. Irreversible soil structural breakdown can occur.";
+          }
+
+
+  
+          // Calculate pH here and display the result
+          document.getElementById("calculatorContainer").innerHTML = "<h2>The pH is: " + ph + "</h2>";
+        }
+	    </script>
+      </div>
+      {% comment %} <div class="col-lg-3">
+        <div class="sidebar">
+          <div class="row">
+            <div class="col-lg-12">
+              <div class="sidebar-item recent-posts">
+                <div class="sidebar-heading">
+                  <h2>Related Posts</h2>
+                </div>
+                <div class="content">
+                  <ul>
+                  {% for blog in related_blogs %}
+                    <li><a href="{% url 'blog_details' blog.slug%}">
+                      <h5>{{blog.title}}</h5>
+                      <span>{{blog.created_date}}</span>
+                    </a></li>
+                  {% endfor %}
+                  </ul>
+                </div>
+              </div>
+            </div> 
+          </div>
+        </div>
+      </div> {% endcomment %}
     </div>
-</div>
+  </div>
+</body>
+</section>
 
 {% comment %} <div class="col-lg-12">
     <div class="sidebar-item categories">
