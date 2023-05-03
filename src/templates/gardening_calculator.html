@@ -8,17 +8,92 @@
 
 <section>
   <style>
+    .my_button:hover {
+      background-color: green;
+    }
+
+    input[type="number"] {
+      padding: 5px;
+      border-radius: 5px;
+      border: 1px solid #ccc;
+    }
+  
+    select {
+      padding: 5px;
+      border-radius: 5px;
+      border: 1px solid #ccc;
+    }
+    {% comment %} button:hover {
+      background-color: lightgreen;
+      color: white;
+      text-color: black;
+    } {% endcomment %}
 		#container {
 			align-items: center;
 			justify-content: center;
 			text-align: center;
 			width: 75%;
 			height: 100%;
+      margin-top: 20px;
+      margin-left: auto;
+      margin-right: auto;
+      {% comment %} border: 5px solid black; {% endcomment %}
+      border: 5px dashed;
+      border-image: linear-gradient(to bottom, #ff7f00, #ffff00) 1;
+      background: #fff6be;
+      box-shadow: 0 0 10px 5px #333, 0 0 2px 1px #333;
 		}
+    #result {
+      display: none;
+      padding: 10px;
+      margin-top: 10px;
+      width: 90%;
+      height: 90%;
+      margin-left: auto;
+      margin-right: auto;
+      margin-bottom: auto;
+      display: none;
+      animation: fadein 2s ease-out;
+      outline: 5px solid #333;
+    }
+    @keyframes fadein {
+      from {
+        opacity: 0;
+      }
+      to {
+        opacity: 1;
+      }
+    }
+    /* Apply animation to .animation class */
+    .animation {
+      animation-name: fadein;
+      animation-duration: 2s;
+    }
+    #choose_calculator_message{
+      margin-top: 20px;
+    }
+    #calculatorContainer{
+      background: white;
+      width: 85%;
+      margin-left: auto;
+      margin-right: auto;
+      border: 5px dashed;
+      border-image: linear-gradient(to bottom, #00b300, #bfff00) 1;
+      box-shadow: 0 0 10px 5px #333, 0 0 2px 1px #333;
+      margin-bottom: auto;
+    }
+    #calculator_button{
+      margin-top: 10px;
+      padding: 10px;
+      display: block;
+      width: 75%;
+      align-items: center;
+			justify-content: center;
+      margin-left: auto;
+      margin-right: auto;
+    }
 	</style>
-</head>
-<body onload="showFertilizerCalculator()">
-  <body onload="showFertilizerCalculator()">
+  <body onload="showFertilizerCalculator()" background='green'>
   <div class="container-fluid">
     <div class="row">
       <div class="col-lg-2">
@@ -32,7 +107,7 @@
                 <div class="content">
                   <ul>
                   {% for category in categories %}
-                    <li><a href="{% url 'category_blogs' category.slug %}">- {{category.title}}</a></li>
+                    <li><h6><a href="{% url 'category_blogs' category.slug %}">- {{category.title}}</a></h6></li>
                   {% endfor %}
                   </ul>
                 </div>
@@ -42,49 +117,155 @@
         </div>
       </div>
       
-      <div id='container'>
-        
-        <h3 align> Welcome to The Gardening Calculator </h3>
-        <p align>Please choose one of the following calculators:</p>
-	      <button onclick="showFertilizerCalculator()">Fertilizer Calculator</button>
-	      <button onclick="showPHMeterCalculator()">pH Meter Calculator</button>
+      <div id="container">
+        <div>
+          <br>
+          <h3 align> Welcome to The Gardening Calculator </h3>
+            <div id='choose_calculator_message'>
+              <p margin-top = '20px'>Please choose one of the following calculators:</p>
+                <div id = 'calculator_button' >
+	                <button onclick="showFertilizerCalculator()" style="background-color: #F5DEAB;" onmouseover="this.style.backgroundColor='lightgreen';" onmouseout="this.style.backgroundColor='#F5DEAB';">Fertilizer Calculator</button>
+                  <button onclick="showPHMeterCalculator()" style="background-color: #F5DEAB;" onmouseover="this.style.backgroundColor='lightgreen';" onmouseout="this.style.backgroundColor='#F5DEAB';">pH Meter Calculator</button>
+                </div>
+                <br>  
+	                  <div id="calculatorContainer">
+                      <script>
+                  
+                        function showFertilizerCalculator() {
+                          document.getElementById("calculatorContainer").innerHTML = `
+                          <style>
+                            input[type="number"], select {
+                              padding: 8px;
+                              border: 1px solid #ccc;
+                              border-radius: 4px;
+                              box-sizing: border-box;
+                              margin-bottom: 10px;
+                              font-size: 16px;
+                              display: inline-block;
+                            }
+                      
+                            select {
+                              width:40%;
+                            }
 
-	      <div id="calculatorContainer"></div>
+                            button {
+                              background-color: #F5DEAB;
+                            }
+                            
+                            button:hover {
+                              background-color: green;
+                            }
+                            
+                            button:not(:hover) {
+                              background-color: #F5DEAB;
+                            }
 
-	    <script>
-		    function showFertilizerCalculator() {
-			  document.getElementById("calculatorContainer").innerHTML = "<h5>Now you are showing a Fertilizer Calculator</h5>";
-		    }
-
-		    function showPHMeterCalculator() {
-          document.getElementById("calculatorContainer").innerHTML = "<h2>It is a pH Meter Calculator</h2><h6> Please use a ph Meter and put it into your soil and see the result value on the screen</h6><label for='phValue'>Enter pH value (0-14): </label><input type='text' id='phValue' name='phValue'><button onclick='calculatePH()'>Calculate</button><p id='result'></p>";
-        }
-
-        function calculatePH() {
-          var pH = parseFloat(document.getElementById("phValue").value);
+                          </style>
+                            <br>
+                            <h2>Fertilizer Calculator</h2>
+                            <label for="shape"><b>Select shape</b>&nbsp:&nbsp</label>
+                            <select id="shape" name="shape">
+                              <option value="rectangle">Rectangle</option>
+                              <option value="square">Square</option>
+                              <option value="circle">Circle</option>
+                            </select>
+                            <br><br>
+                            <div id="rectangleInputs">
+                              
+                              <label for="length">Length (inches):&nbsp</label>
+                              <input type="number" id="length" name="length"><br><br>
+                              
+                              <label for="width">Width (inches):&nbsp</label>
+                              <input type="number" id="width" name="width"><br><br>
+                              <label for="depth">Depth (inches):&nbsp</label>
+                              <input type="number" id="depth" name="depth"><br><br>
+                              
+                            </div>
+                            <div id="squareInputs" style="display: none;">
+                              
+                              <label for="length">Length (inches):&nbsp</label>
+                              <input type="number" id="length" name="length"><br><br>
+                              <label for="depth">Depth (inches):&nbsp</label>
+                              <input type="number" id="depth" name="depth"><br><br>
+                              
+                            </div>
+                            <div id="circleInputs" style="display: none;">
+                              
+                              <label for="radius">Radius (inches):&nbsp</label>
+                              <input type="number" id="radius" name="radius"><br><br>
+                              <label for="height">Height (inches):&nbsp</label>
+                              <input type="number" id="height" name="height"><br><br>
+                              
+                            </div>
+                            <button>Check result</button>
+                          `;
+                          
+                          const shapeSelect = document.getElementById("shape");
+                          const rectangleInputs = document.getElementById("rectangleInputs");
+                          const squareInputs = document.getElementById("squareInputs");
+                          const circleInputs = document.getElementById("circleInputs");
+                    
+                          shapeSelect.addEventListener("change", function() {
+                            if (this.value === "rectangle") {
+                              rectangleInputs.style.display = "block";
+                              squareInputs.style.display = "none";
+                              circleInputs.style.display = "none";
+                            } else if (this.value === "circle") {
+                              rectangleInputs.style.display = "none";
+                              squareInputs.style.display = "none";
+                              circleInputs.style.display = "block";
+                            } else if(this.value === "square"){
+                              rectangleInputs.style.display = "none";
+                              squareInputs.style.display = "block";
+                              circleInputs.style.display = "none";
+                            }
+                          });
+                        }
+                    
+                        function showPHMeterCalculator() {
+                          document.getElementById("calculatorContainer").innerHTML = "<br><h2 padding>It is a pH Meter Calculator</h2><br><h6> Please use a ph Meter and put it into your soil and see the result value on the screen</h6><label for='phValue'><br>Enter pH value (0-14)&nbsp:&nbsp</label><input type='text' id='phValue' name='phValue'><div><br><button onclick='calculatePH()' onmouseover='this.style.backgroundColor=`green`' onmouseout='this.style.backgroundColor=`#F5DEAB`' style='background-color: #F5DEAB;'>Check result</button></div><div id='result' margin-bottom='10px'></div><br>";
+                          
+                          // Add border to the input field
+                          document.getElementById("phValue").style.border = "2px solid #ccc";
+                          document.getElementById("phValue").style.borderRadius = "4px";
+                          document.getElementById("phValue").style.padding = "6px 10px";
+                          document.getElementById("phValue").style.boxSizing = "border-box";
+                        }
   
-          if (isNaN(pH) || pH < 0 || pH > 14) {
-            alert("Please enter a pH value between 0 and 14.");
-            return;
-          }
-          else if (pH > 5.5 && pH <= 6.5) {
-            document.getElementById("result").innerHTML = "pH value is close to neutral. Optimum for many acid-sensitive plants. Some trace elements may become unavailable.";
-          } else if (pH > 5 && pH <= 5.5) {
-            document.getElementById("result").innerHTML = "pH value is slightly acid. Optimal balance of major nutrients and trace elements available for plant uptake.";
-          } else if (pH > 4.5 && pH <= 5) {
-            document.getElementById("result").innerHTML = "pH value is moderately acid. Below pH 4.8 aluminium (Al) can become toxic to plants, depending on soil type. Phosphorus combines with Al and may be less available to plants.";
-          } else if (pH > 4 && pH <= 4.5) {
-            document.getElementById("result").innerHTML = "pH value is strongly acid. Aluminium becomes soluble in toxic quantities. Manganese (Mn) becomes soluble and toxic to plants in some soils, depending on temperature and moisture conditions. Molybdenum (Mo) is less available. Soil bacterial activity is slowed down.";
-          } else {
-            document.getElementById("result").innerHTML = "pH value is extremely acid. Irreversible soil structural breakdown can occur.";
-          }
-
-
-  
-          // Calculate pH here and display the result
-          document.getElementById("calculatorContainer").innerHTML = "<h2>The pH is: " + ph + "</h2>";
-        }
-	    </script>
+                        function calculatePH() {
+                          var pH = parseFloat(document.getElementById("phValue").value);
+    
+                          if (isNaN(pH) || pH < 0 || pH > 14) {
+                            alert("Please enter a pH value between 0 and 14.");
+                            return;
+                          }
+                          else if (pH > 5.5 && pH <= 6.5) {
+                            document.getElementById("result").style.display = "block";
+                            document.getElementById("result").innerHTML = "<div class='animation'>pH value is close to neutral. Optimum for many acid-sensitive plants. Some trace elements may become unavailable.</div>";
+                          }else if (pH > 5 && pH <= 5.5) {
+                            document.getElementById("result").style.display = "block";
+                            document.getElementById("result").innerHTML = "<div class='animation'>pH value is slightly acid. Optimal balance of major nutrients and trace elements available for plant uptake.</div>";
+                          }else if (pH > 4.5 && pH <= 5) {
+                            document.getElementById("result").style.display = "block";
+                            document.getElementById("result").innerHTML = "<div class='animation'>pH value is moderately acid. Below pH 4.8 aluminium (Al) can become toxic to plants, depending on soil type. Phosphorus combines with Al and may be less available to plants.</div>";
+                          }else if (pH > 4 && pH <= 4.5) {
+                            document.getElementById("result").style.display = "block";
+                            document.getElementById("result").innerHTML = "<div class='animation'>pH value is strongly acid. Aluminium becomes soluble in toxic quantities. Manganese (Mn) becomes soluble and toxic to plants in some soils, depending on temperature and moisture conditions. Molybdenum (Mo) is less available. Soil bacterial activity is slowed down.</div>";
+                          }else{
+                            document.getElementById("result").style.display = "block";
+                            document.getElementById("result").innerHTML = "<div class='animation'>pH value is extremely acid. Irreversible soil structural breakdown can occur.</div>";
+                          }
+                        }
+                  
+                      </script>
+                      
+                    </div>
+                    <br>
+                 
+            </div>
+            
+        </div>
+	      
       </div>
       {% comment %} <div class="col-lg-3">
         <div class="sidebar">
@@ -113,22 +294,5 @@
   </div>
 </body>
 </section>
-
-{% comment %} <div class="col-lg-12">
-    <div class="sidebar-item categories">
-      <div class="sidebar-heading">
-        <h2>Categories</h2>
-      </div>
-      <div class="content">
-        <ul>
-          {% for category in categories %}
-          <li><a href="{% url 'category_blogs' category.slug %}">- {{category.title}}</a></li>
-          {% endfor %}
-        </ul>
-      </div>
-    </div>
-  </div> {% endcomment %}
-
-
 
 {%endblock content%}
