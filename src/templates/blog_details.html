@@ -118,7 +118,7 @@
                                     {% if request.user.is_authenticated %}
                                     <button type="submit" id="form-submit" class="main-button reply-button">Reply</button>
                                     {% else %}
-                                    <a href="#" id="form-submit" class="main-button reply-button">Login to reply</a>
+                                    <a href="{% url 'login' %}" id="form-submit" class="main-button reply-button">Login to reply</a>
                                     {% endif %}
                                   </fieldset>
                                 </div>
@@ -162,7 +162,7 @@
                             {% if request.user.is_authenticated %}
                             <button type="submit" id="form-submit" class="main-button">Submit</button>
                             {% else %}
-                            <a href="#" id="form-submit" class="main-button">Login to comment</a>
+                            <a href="{% url 'login' %}" id="form-submit" class="main-button">Login to comment</a>
                             {% endif %}
                           </fieldset>
                         </div>

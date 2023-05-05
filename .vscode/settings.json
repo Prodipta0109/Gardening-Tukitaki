@@ -2,7 +2,7 @@
     "[python]": {
         "editor.formatOnType": true,
     },
-    "editor.fontSize": 22,
+    "editor.fontSize": 14,
     "files.autoSave": "afterDelay",
     "git.autofetch": true,
     "git.confirmSync": false,

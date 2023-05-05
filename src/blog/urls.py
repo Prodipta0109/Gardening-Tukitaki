@@ -11,7 +11,7 @@ urlpatterns = [
     path('add_reply/<int:blog_id>/<int:comment_id>/', add_reply, name='add_reply'),
     # path('like_blog/<int:pk>/', like_blog, name='like_blog'),
     # path('search_blogs/', search_blogs, name='search_blogs'),
-    # path('my_blogs/', my_blogs, name='my_blogs'),
+    path('my_blogs/', my_blogs, name='my_blogs'),
     # path('add_blog/', add_blog, name='add_blog'),
     # path('update_blog/<str:slug>/', update_blog, name='update_blog'),
 ]

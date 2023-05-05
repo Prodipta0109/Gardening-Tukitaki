@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect, get_list_or_404
+from django.shortcuts import render, redirect, get_list_or_404, get_object_or_404
 from django.views.decorators.cache import never_cache
 from django.contrib.auth.decorators import login_required 
 from django.contrib.auth import login, logout, authenticate
@@ -6,12 +6,21 @@ from django.contrib import messages
 
 from .forms import(
     UserRegistrationForm,
-    LoginForm
+    LoginForm,
+    UserProfileUpdateForm,
+    ProfilePictureUpdateForm
 )
+
+from .decorators import(
+    not_logged_in_required
+)
+
+from .models import User
 
 
 # Create your views here.
 @never_cache
+@not_logged_in_required
 def login_user(request):
     form = LoginForm()
 
@@ -39,6 +48,7 @@ def logout_user(request):
     return redirect('login')
 
 @never_cache
+@not_logged_in_required
 def register_user(request):
     form = UserRegistrationForm()
 
@@ -55,4 +65,50 @@ def register_user(request):
         "form": form
     }
     return render(request, 'registration.html', context)
+
+@login_required(login_url='login')
+def profile(request):
+    account = get_object_or_404(User, pk=request.user.pk)
+    form = UserProfileUpdateForm(instance=account)
+    
+    if request.method == "POST":
+        if request.user.pk != account.pk:
+            return redirect('home')
+        
+        form = UserProfileUpdateForm(request.POST, instance=account)
+        if form.is_valid():
+            form.save()
+            messages.success(request, "Profile has been updated sucessfully")
+            return redirect('profile')
+        else:
+            print(form.errors)
+
+    context = {
+        "account": account,
+        "form": form
+    }
+    return render(request, 'profile.html', context)
+
+
+@login_required
+def change_profile_picture(request):
+    if request.method == "POST":
+        
+        form = ProfilePictureUpdateForm(request.POST, request.FILES)
+        
+        if form.is_valid():
+            image = request.FILES['profile_image']
+            user = get_object_or_404(User, pk=request.user.pk)
+            
+            if request.user.pk != user.pk:
+                return redirect('home')
+
+            user.profile_image = image
+            user.save()
+            messages.success(request, "Profile image updated successfully")
+
+        else:
+            print(form.errors)
+
+    return redirect('profile')
 
