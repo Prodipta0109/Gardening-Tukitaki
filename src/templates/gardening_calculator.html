@@ -8,6 +8,32 @@
 
 <section>
   <style>
+    /* Css code for styling our table */
+
+    td, caption, th {
+      padding: 0.7rem;
+    }
+
+    table, td, th {
+      border: 1px solid green;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    tr:nth-child(even) {
+      background-color: rgb(255, 255, 255);
+    }
+
+    tr:nth-child(odd) {
+      background-color: rgba(113, 112, 114, 0.418);
+    }
+
+    th {
+      color: white;
+      background-color: gray;
+    }
+
+
     .my_button:hover {
       background-color: green;
     }
@@ -55,6 +81,12 @@
       display: none;
       animation: fadein 2s ease-out;
       outline: 5px solid #333;
+    }
+    #feretilizer_result{
+      outline: 1px solid #333;
+      padding:5px;
+      margin-left: auto;
+      width: auto;
     }
     @keyframes fadein {
       from {
@@ -159,6 +191,31 @@
                             button:not(:hover) {
                               background-color: #F5DEAB;
                             }
+                            .result-box {
+                              padding: 10px;
+                              margin-top: 10px;
+                              background-color: #f1f1f1;
+                              border-radius: 4px;
+                              display: inline-block;
+                              animation: fadein 2s ease-out;
+                              border: 2px solid black;
+                              box-shadow: 0 0 2px 5px #999, 0 0 2px 1px #333;
+                              width: 90%
+                            }
+                            
+                            @keyframes fadein {
+                              from {
+                                opacity: 0;
+                              }
+                              to {
+                                opacity: 1;
+                              }
+                            }
+                    
+                            .result-box h3 {
+                              margin-top: 0;
+                              animation: fadein 2s ease-out;
+                            }
 
                           </style>
                             <br>
@@ -173,31 +230,33 @@
                             <div id="rectangleInputs">
                               
                               <label for="length">Length (inches):&nbsp</label>
-                              <input type="number" id="length" name="length"><br><br>
+                              <input type="number" id="length" name="length" min="1" onkeypress="return event.charCode >= 48 && event.charCode <= 57"><br><br>
                               
                               <label for="width">Width (inches):&nbsp</label>
-                              <input type="number" id="width" name="width"><br><br>
+                              <input type="number" id="width" name="width" min="1" onkeypress="return event.charCode >= 48 && event.charCode <= 57"><br><br>
                               <label for="depth">Depth (inches):&nbsp</label>
-                              <input type="number" id="depth" name="depth"><br><br>
+                              <input type="number" id="depth" name="depth" min="1" onkeypress="return event.charCode >= 48 && event.charCode <= 57"><br><br>
                               
                             </div>
                             <div id="squareInputs" style="display: none;">
                               
                               <label for="length">Length (inches):&nbsp</label>
-                              <input type="number" id="length" name="length"><br><br>
+                              <input type="number" id="s_length" name="length" min="1" onkeypress="return event.charCode >= 48 && event.charCode <= 57"><br><br>
                               <label for="depth">Depth (inches):&nbsp</label>
-                              <input type="number" id="depth" name="depth"><br><br>
+                              <input type="number" id="s_depth" name="depth" min="1" onkeypress="return event.charCode >= 48 && event.charCode <= 57"><br><br>
                               
                             </div>
                             <div id="circleInputs" style="display: none;">
                               
                               <label for="radius">Radius (inches):&nbsp</label>
-                              <input type="number" id="radius" name="radius"><br><br>
+                              <input type="number" id="radius" name="radius" min="1" onkeypress="return event.charCode >= 48 && event.charCode <= 57"><br><br>
                               <label for="height">Height (inches):&nbsp</label>
-                              <input type="number" id="height" name="height"><br><br>
+                              <input type="number" id="height" name="height" min="1" onkeypress="return event.charCode >= 48 && event.charCode <= 57"><br><br>
                               
                             </div>
-                            <button>Check result</button>
+                            <div><button onclick="resetInputs()"> Reset Calculator</button>&nbsp&nbsp<button onclick="calculateResults()">Check result</button></div>
+                            <div id="resultContainer"></div><br>
+                            
                           `;
                           
                           const shapeSelect = document.getElementById("shape");
@@ -206,6 +265,7 @@
                           const circleInputs = document.getElementById("circleInputs");
                     
                           shapeSelect.addEventListener("change", function() {
+                            resetInputs();
                             if (this.value === "rectangle") {
                               rectangleInputs.style.display = "block";
                               squareInputs.style.display = "none";
@@ -220,6 +280,128 @@
                               circleInputs.style.display = "none";
                             }
                           });
+                        }
+
+                        function calculateResults() {
+                          const shape = document.getElementById("shape").value;
+                          var volume;
+                          var area = 2;
+                          if(shape == "rectangle"){
+                            const length = document.getElementById("length").value;
+                            const width = document.getElementById("width").value;
+                            const depth = document.getElementById("depth").value;
+                            if (length == "" || width == "" || depth == "") {
+                              alert("Please fill up all the fields.");
+                              return false;
+                            }
+                            volume = length*width*depth;
+                          }
+                          else if(shape == "square"){
+                            const length = document.getElementById("s_length").value;
+                            const depth = document.getElementById("s_depth").value;
+                            if (length == "" || depth == "") {
+                              alert("Please fill up all the fields.");
+                              return false;
+                            }
+                            volume = length*length*depth;
+                          }
+                          else if(shape == "circle"){
+                            const radius = document.getElementById("radius").value;
+                            const height = document.getElementById("height").value;
+                            if (radius == "" || height == "") {
+                              alert("Please fill up all the fields.");
+                              return false;
+                            }
+                            volume = 3.1416*radius*radius*height;
+                          }
+                          
+                          
+                          const resultContainer = document.getElementById("resultContainer");
+                          resultContainer.style.display = "block";
+                          resultContainer.innerHTML = `
+                            <div class="result-box">
+                              <div>
+                              
+                              <table border = "2">
+                                <tr> <td colspan = "2"> <h3> Results </h3> </td> </tr>
+                                <tr>
+                                    <th>Inorganic</th>
+                                    <th>Orginic</th>
+                                </tr>
+                              
+                                <tr>
+                                    <td>
+                                        <table border="2">
+                                            <tr>
+                                                <td>Soil(kg)</td>
+                                                <td>${volume}</td>
+                                            </tr>
+                                            <tr>
+                                              <td>TSP(gm)</td>
+                                              <td>100</td>
+                                            </tr>
+                                            <tr>
+                                              <td>Urea(gm)</td>
+                                              <td>100</td>
+                                            </tr>
+                                            <tr>
+                                              <td>MOP(gm)</td>
+                                              <td>75</td>
+                                            </tr>
+                                            <tr>
+                                              <td>Manure(kg)</td>
+                                              <td>50%</td>
+                                            </tr>
+                                            <tr>
+                                              <td>Vermi-compost(kg)</td>
+                                              <td>5</td>
+                                            </tr>
+                                            <tr>
+                                              <td>Gypsum(kg)</td>
+                                              <td>5</td>
+                                            </tr>
+                                        </table>
+                                    </td>
+                                    <td>
+                                        <table border = "2">
+                                          <tr>
+                                            <td>Soil(kg)</td>
+                                            <td>1</td>
+                                          </tr>
+                                          <tr>
+                                            <td>Manure(kg)</td>
+                                            <td>1</td>
+                                          </tr>
+                                          <tr>
+                                            <td>Vermi-compost(kg)</td>
+                                            <td>1</td>
+                                          </tr>
+                                          <tr>
+                                            <td>Coco-dust</td>
+                                            <td>1</td>
+                                          </tr>
+                                        </table>
+                                    </td>
+                                </tr>
+                              </table>
+                              </div>
+                            </div>
+                          `;
+                        }
+
+                        function resetInputs() {
+                          // reset the input fields
+                          document.getElementById("length").value = "";
+                          document.getElementById("width").value = "";
+                          document.getElementById("depth").value =""
+                          document.getElementById("s_length").value="";
+                          document.getElementById("s_depth").value="";
+                          document.getElementById("radius").value="";
+                          document.getElementById("height").value="";
+                      
+                          // hide the result box
+                          var resultBox = document.getElementById("resultContainer");
+                          resultContainer.style.display = "none";
                         }
                     
                         function showPHMeterCalculator() {
