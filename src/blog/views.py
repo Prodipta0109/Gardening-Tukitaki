@@ -163,3 +163,5 @@ def my_blogs(request):
     }
     
     return render(request, 'my_blogs.html', context)
+
+#to check branches
