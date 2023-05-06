@@ -59,7 +59,7 @@
                             </a>
                         </li>
                         <li class="list-group-item my-1">
-                            <a class="text-decoration-none" href="{#}">
+                            <a class="text-decoration-none" href="{% url 'add_blog' %}">
                                 Add Blog
                             </a>
                         </li>
@@ -99,7 +99,7 @@
                         </div>
                         <div class="form-group">
                             <label for="email">Email</label>
-                            <input class="form-control" name="email"  value="{{account.email}}" type="email">
+                            <input class="form-control" name="email"  value="{{account.email}}" type="email" readonly>
                             <p class="text-danger error py-1">{{form.email.errors}}</p>
                         </div>
                         <div class="form-group">

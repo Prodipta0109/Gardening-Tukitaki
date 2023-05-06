@@ -36,6 +36,7 @@ INSTALLED_APPS = [
     'blog',
     'user_profile',
     'gardening_calculator',
+    'ckeditor',
 
 
 #pre installed apps

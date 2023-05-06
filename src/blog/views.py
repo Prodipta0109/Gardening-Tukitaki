@@ -1,6 +1,11 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.core.paginator import PageNotAnInteger, EmptyPage, Paginator
+from django.db.models import Q;
+from django.http import JsonResponse
+from django.contrib import messages
+from django.utils.text import slugify
+from user_profile.models import User
 
 from .models import (
     Blog,
@@ -10,7 +15,7 @@ from .models import (
     Reply
 )
 
-from .forms import TextForm
+from .forms import TextForm, AddBlogForm
 # Create your views here.
 
 
@@ -165,3 +170,137 @@ def my_blogs(request):
     return render(request, 'my_blogs.html', context)
 
 #to check branches
+@login_required(login_url='login')
+def like_blog(request, pk):
+    context = {}
+    blog = get_object_or_404(Blog, pk=pk)
+    
+    if request.user in blog.likes.all():
+        blog.likes.remove(request.user)
+        context['liked'] = False
+        context['like_count'] = blog.likes.all().count()
+        
+    else:
+        blog.likes.add(request.user)
+        context['liked'] = True
+        context['like_count'] = blog.likes.all().count()
+
+    return JsonResponse(context, safe=False)
+
+def search_blogs(request):
+    search_key = request.GET.get('search', None)
+    recent_blogs = Blog.objects.order_by('-created_date')
+    tags = Tag.objects.order_by('-created_date')
+    
+    if search_key:
+        blogs = Blog.objects.filter(
+            Q(title__icontains=search_key) |
+            Q(category__title__icontains=search_key) |
+            Q(user__username__icontains=search_key) |
+            Q(tags__title__icontains=search_key)
+        ).distinct()
+
+        context = {
+            "blogs": blogs,
+            "recent_blogs": recent_blogs,
+            "tags": tags,
+            "search_key": search_key
+        }
+
+        return render(request, 'search.html', context)
+
+    else:
+        return redirect('home')
+    
+    
+@login_required(login_url='login')
+def add_blog(request):
+    form = AddBlogForm()
+
+    if request.method == "POST":
+        form = AddBlogForm(request.POST, request.FILES)
+        if form.is_valid():
+            tags = request.POST['tags'].split(',')
+            user = get_object_or_404(User, pk=request.user.pk)
+            category = get_object_or_404(Category, pk=request.POST['category'])
+            blog = form.save(commit=False)
+            blog.user = user
+            blog.category = category
+            blog.save()
+
+            for tag in tags:
+                tag_input = Tag.objects.filter(
+                    title__iexact=tag.strip(),
+                    slug= slugify(tag.strip())
+                )
+                if tag_input.exists():
+                    t = tag_input.first()
+                    blog.tags.add(t)
+
+                else:
+                    if tag != '':
+                        new_tag = Tag.objects.create(
+                            title=tag.strip(),
+                            slug=slugify(tag.strip())
+                        )
+                        blog.tags.add(new_tag)
+
+            messages.success(request, "Blog added successfully")
+            return redirect('blog_details', slug=blog.slug)
+        else:
+            print(form.errors)
+
+    context = {
+        "form": form
+    }
+    return render(request, 'add_blog.html',context)
+
+@login_required(login_url='login')
+def update_blog(request, slug):
+    blog = get_object_or_404(Blog, slug=slug)
+    form = AddBlogForm(instance=blog)
+
+    if request.method == "POST":
+        form = AddBlogForm(request.POST, request.FILES, instance=blog)
+        
+        if form.is_valid():
+            
+            if request.user.pk != blog.user.pk:
+                return redirect('home')
+
+            tags = request.POST['tags'].split(',')
+            user = get_object_or_404(User, pk=request.user.pk)
+            category = get_object_or_404(Category, pk=request.POST['category'])
+            blog = form.save(commit=False)
+            blog.user = user
+            blog.category = category
+            blog.save()
+
+            for tag in tags:
+                tag_input = Tag.objects.filter(
+                    title__iexact=tag.strip(),
+                    slug=slugify(tag.strip())
+                )
+                if tag_input.exists():
+                    t = tag_input.first()
+                    blog.tags.add(t)
+
+                else:
+                    if tag != '':
+                        new_tag = Tag.objects.create(
+                            title=tag.strip(),
+                            slug=slugify(tag.strip())
+                        )
+                        blog.tags.add(new_tag)
+
+            messages.success(request, "Blog updated successfully")
+            return redirect('blog_details', slug=blog.slug)
+        else:
+            print(form.errors)
+
+
+    context = {
+        "form": form,
+        "blog": blog
+    }
+    return render(request, 'update_blog.html', context)

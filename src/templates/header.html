@@ -1,5 +1,11 @@
     <!-- Header -->
     <header class="">
+      <style>
+        input,
+        input::placeholder {
+        font: 11px sans-serif;
+        }
+      </style>
         <nav class="navbar navbar-expand-lg">
           <div class="container-fluid">
             <div class="collapse navbar-collapse" id="navbarResponsive">
@@ -16,6 +22,12 @@
             </div>
 
             <a class="navbar-brand text-info" href="index.html"><h1>Gardening Tukitaki<br></h1> <p class="text-success"><h7>Now green is in your own hands</h7></p></a>
+            {% comment %} <a class="navbar-brand text-info" href="index.html">
+              <img src="Garden.webp" alt="Gardening Tukitaki Logo" width="10px", length="5px">
+              <p class="text-success"><h7>Now green is in your own hands</h7></p>
+            </a> {% endcomment %}
+            
+            </a>
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
               <span class="navbar-toggler-icon"></span>
             </button>
@@ -23,9 +35,6 @@
               <ul class="navbar-nav ml-auto">
                 <li class="nav-item">
                   <a class="nav-link" href="{% url 'home' %}"> Home</a>
-                </li>
-                <li class="nav-item">
-                  <a class="nav-link" href="about.html">About Us</a>
                 </li>
                 <li class="nav-item">
                   <a class="nav-link" href="{% url 'blogs' %}">Blogs Posts</a>
@@ -38,8 +47,7 @@
                   <div class="dropdown-menu" aria-labelledby="navbarDropdown">
                     
                     <a class="dropdown-item" href="{% url 'profile' %}">My Profile</a>
-                    <a class="dropdown-item" href="#">Notification
-                    </a>
+                    <a class="dropdown-item" href="#">Notification</a>
                     <a class="dropdown-item" href="{% url 'logout' %}">Logout</a>
                    
                   </div>
@@ -50,6 +58,14 @@
                 </li>
                 {% endif  %}
               </ul>
+              <form class="form-inline d-flex flex-nowrap my-2 ml-auto search-form" action="{% url 'search_blogs' %}" method="GET">
+                <div class="input-group">
+                  <input class="form-control px-2" name="search" type="text" placeholder="Search blogs" required>
+                    <div class="input-group-append">
+                        <button class="btn btn-primary ml-1" type="submit">Search</button>
+                    </div>
+                </div>
+              </form>
             </div>
           </div>
         </nav>
