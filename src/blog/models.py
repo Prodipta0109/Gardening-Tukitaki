@@ -4,6 +4,7 @@ from django.utils.text import slugify
 from user_profile.models import User
 from .slugs import generate_unique_slug
 from ckeditor.fields import RichTextField
+from ckeditor_uploader.fields import RichTextUploadingField
 
 class Category(models.Model):
     title = models.CharField(max_length=150, unique=True)
@@ -57,7 +58,7 @@ class Blog(models.Model):
     )
     slug = models.SlugField(null=True, blank=True)
     banner = models.ImageField(upload_to='blog_banners')
-    description = RichTextField()
+    description = RichTextUploadingField()
     created_date = models.DateField(auto_now_add=True)
 
     #from Video here
