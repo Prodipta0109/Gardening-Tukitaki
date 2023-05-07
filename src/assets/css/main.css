@@ -43,6 +43,14 @@
     color: #CDCDCD !important;
 }
 
+.fa-facebook-f{
+    color: rgb(15, 15, 15) !important;
+}
+
+.fa-twitter{
+    color: rgb(15, 15, 15) !important;
+}
+
 .btn-primary {
     display: inline-block;
     background-color: #00FF00;
