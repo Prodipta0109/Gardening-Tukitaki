@@ -38,6 +38,7 @@ INSTALLED_APPS = [
     'gardening_calculator',
     'ckeditor',
     'ckeditor_uploader',
+    'sellposts',
 
 
 #pre installed apps
@@ -75,6 +76,7 @@ TEMPLATES = [
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
                 'blog.context-processors.get_all_categories',
+                'sellposts.context-processors.get_all_sell_categories'
             ],
         },
     },
