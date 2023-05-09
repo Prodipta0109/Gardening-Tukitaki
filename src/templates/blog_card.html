@@ -32,7 +32,7 @@
           <li><a href="#">{{blog.blog_comments.all.count}} Comments</a></li>
         </ul>
         <p>
-            {{blog.description|truncatewords:20}}
+          {{blog.description|truncatewords:20|safe}}
         </p>
         <div class="post-options">
           <div class="row">
