@@ -12,10 +12,12 @@ from .models import (
     Tag,
     Category,
     Comment,
-    Reply
+    Reply,
+    Sell_post,
+    Sell_Post_Category
 )
 
-from .forms import TextForm, AddBlogForm
+from .forms import TextForm, AddBlogForm, AddSellPostForm
 # Create your views here.
 
 
@@ -304,3 +306,44 @@ def update_blog(request, slug):
         "blog": blog
     }
     return render(request, 'update_blog.html', context)
+
+@login_required(login_url='login')
+def sell_post(request):  
+    sell_form = AddSellPostForm()
+
+    if request.method == "POST":
+        sell_form = AddSellPostForm(request.POST, request.FILES)
+        if sell_form.is_valid():
+            user = get_object_or_404(User, pk=request.user.pk)
+            category = get_object_or_404(Sell_Post_Category, pk=request.POST['category'])
+            sellpost = sell_form.save(commit=False)
+            sellpost.user = user
+            sellpost.category = category
+            sellpost.save()
+
+            # for tag in tags:
+            #     tag_input = Tag.objects.filter(
+            #         title__iexact=tag.strip(),
+            #         slug= slugify(tag.strip())
+            #     )
+            #     if tag_input.exists():
+            #         t = tag_input.first()
+            #         blog.tags.add(t)
+
+            #     else:
+            #         if tag != '':
+            #             new_tag = Tag.objects.create(
+            #                 title=tag.strip(),
+            #                 slug=slugify(tag.strip())
+            #             )
+            #             blog.tags.add(new_tag)
+
+            messages.success(request, "Sell post added successfully")
+            return redirect('home')
+        else:
+            print(sell_form.errors)
+
+    context = {
+        "form": sell_form
+    }
+    return render(request, 'sell_post.html',context)

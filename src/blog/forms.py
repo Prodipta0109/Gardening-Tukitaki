@@ -1,6 +1,6 @@
 from django import forms
 
-from .models import Blog
+from .models import Blog,Sell_post
 
 from ckeditor.fields import RichTextField
 from ckeditor_uploader.fields import RichTextUploadingField
@@ -21,3 +21,16 @@ class AddBlogForm(forms.ModelForm):
             "banner",
             "description"
         ) 
+        
+class AddSellPostForm(forms.ModelForm):
+    description = RichTextUploadingField()
+    
+    class Meta:
+        model = Sell_post
+        fields = (
+            "title",
+            "category",
+            "banner",
+            "description"
+        ) 
+        

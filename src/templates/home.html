@@ -10,53 +10,76 @@
 
 {% include 'banner.html' %}
 
+<style>
+  .blog-post {
+    border-radius: 10px;
+    padding: 20px;
+    margin-bottom: 20px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease;
+    border: 2px solid;
+    background-image: linear-gradient(45deg, rgba(220, 238, 255, 0.8), rgba(242, 222, 222, 0.6)); /* Use a gradient with lighter opacity and slight color */
+  }
+
+  .blog-post:hover {
+    transform: scale(1.05);
+    background-image: none;
+    border-color: #ff4081;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  }
+</style>
+
 <section class="blog-posts">
     <div class="container">
       <div class="row">
         <div class="col-lg-8">
-          <div class="all-blog-posts">
-            <div class="row">
-              {% for blog in blogs|slice:"3"  %}
-              <div class="col-lg-12">
-                <div class="blog-post">
-                  <div class="blog-thumb">
-                    <img src="{{blog.banner.url}}" alt="">
-                  </div>
-                  <div class="down-content">
-                    <span>{{blog.category}}</span>
-                    <a href="{% url 'blog_details' blog.slug %}"><h4>{{blog.title}}</h4></a>
-                    <ul class="post-info">
-                      <li><a href="#">{{blog.user.username}}</a></li>
-                      <li><a href="#">{{blog.created_date}}</a></li>
-                      <li><a href="#">{{blog.blog_comments.all.count}}</a></li>
-                    </ul>
-                    <p>{{blog.description|truncatewords:30}}</p>
-                    <div class="post-options">
-                      <div class="row">
-                        <div class="col-6">
-                          <ul class="post-tags">
-                            {% if blog.tags.all.count > 0 %}
-                            {% for tag in blog.tags.all %}
-                            <li><i class="fa fa-tags">{{tag.title}}</i></li>
-                            {% endfor %}
-                            {% else %}
-                            <li><i class="fa fa-tags">No tag</i></li>
-                            {% endif %}
-                          </ul>
+          
+            <div class="all-blog-posts">
+              <div class="row">
+                {% for blog in blogs|slice:"3"  %}
+                {% comment %} <div class="blog-card"> {% endcomment %}
+                  <div class="col-lg-12">
+                    <div class="blog-post">
+                      <div class="blog-thumb">
+                        <img src="{{blog.banner.url}}" alt="">
+                      </div>
+                      <div class="down-content">
+                        <span>{{blog.category}}</span>
+                        <a href="{% url 'blog_details' blog.slug %}"><h4>{{blog.title}}</h4></a>
+                        <ul class="post-info">
+                          <li><a href="#">{{blog.user.username}}</a></li>
+                          <li><a href="#">{{blog.created_date}}</a></li>
+                          <li><a href="#">{{blog.blog_comments.all.count}}</a></li>
+                        </ul>
+                        <p>{{blog.description|truncatewords:30|safe}}</p>
+                        <div class="post-options">
+                          <div class="row">
+                            <div class="col-6">
+                              <ul class="post-tags">
+                                {% if blog.tags.all.count > 0 %}
+                                {% for tag in blog.tags.all %}
+                                <li><i class="fa fa-tags">{{tag.title}}</i></li>
+                                {% endfor %}
+                                {% else %}
+                                <li><i class="fa fa-tags">No tag</i></li>
+                                {% endif %}
+                              </ul>
+                            </div>
+                          </div>
                         </div>
                       </div>
                     </div>
                   </div>
-                </div>
-              </div>
-              {% endfor %}
-              <div class="col-lg-12">
-                <div class="main-button">
-                  <a href="{% url 'blogs' %}">View All Posts</a>
+                {% comment %} </div> {% endcomment %}
+                {% endfor %}
+                <div class="col-lg-12">
+                  <div class="main-button">
+                    <a href="{% url 'blogs' %}">View All Posts</a>
+                  </div>
                 </div>
               </div>
             </div>
-          </div>
+          
         </div>
         <!-- Sidebar-->
         {% include 'sidebar.html' %}
