@@ -22,18 +22,22 @@ from .forms import TextForm, AddBlogForm, AddSellPostForm
 
 
 def home(request):
-    blogs = Blog.objects.order_by('-created_date')
+    blogs = Blog.objects.filter(is_approved=True).order_by('-created_date')
     tags = Tag.objects.order_by('-created_date')
+    featured_blogs = Blog.objects.filter(is_featured=True, is_approved=True).order_by('-created_date')
     context = {
-        "blogs": blogs
+        "blogs": blogs,
+        "featured_blogs" : featured_blogs
+        
     }
     return render(request, 'home.html', context)
 
 def blogs(request):
-    queryset = Blog.objects.order_by('-created_date')
+    queryset = Blog.objects.filter(is_approved=True).order_by('-created_date')
     tags = Tag.objects.order_by('-created_date')
     page = request.GET.get('page', 1)
     paginator = Paginator(queryset, 4)
+    featured_blogs = Blog.objects.filter(is_featured=True).order_by('-created_date')
     
     try:
         blogs = paginator.page(page)
@@ -46,17 +50,19 @@ def blogs(request):
     context = {
         "blogs": blogs,
         "tags": tags,
-        "paginator": paginator
+        "paginator": paginator,
+        "queryset" : queryset,
+        "featured_blogs" : featured_blogs
     }
     return render(request, 'blogs.html', context)
 
 def category_blogs(request, slug):
     category = get_object_or_404(Category, slug=slug)
-    queryset = category.category_blogs.all()
+    queryset = category.category_blogs.all().filter(is_approved=True)
     tags = Tag.objects.order_by('-created_date')[:5]
     page = request.GET.get('page', 1)
     paginator = Paginator(queryset, 2)
-    all_blogs = Blog.objects.order_by('-created_date')[:5]
+    all_blogs = Blog.objects.filter(is_approved=True).order_by('-created_date')[:5]
     
     try:
         blogs = paginator.page(page)
@@ -67,20 +73,21 @@ def category_blogs(request, slug):
         return redirect('blogs')
 
     context = {
-        "blogs": blogs,
+        "blogs": queryset,
         "tags": tags,
         "all_blogs": all_blogs
+        
     }
     return render(request, 'category_blogs.html', context)
 
 
 def tag_blogs(request, slug):
     tag = get_object_or_404(Tag, slug=slug)
-    queryset = tag.tag_blogs.all()
+    queryset = tag.tag_blogs.all().filter(is_approved=True)
     tags = Tag.objects.order_by('-created_date')[:5]
     page = request.GET.get('page', 1)
     paginator = Paginator(queryset, 2)
-    all_blogs = Blog.objects.order_by('-created_date')[:5]
+    all_blogs = Blog.objects.filter(is_approved=True).order_by('-created_date')[:5]
     
     try:
         blogs = paginator.page(page)
@@ -101,7 +108,7 @@ def blog_details(request, slug):
     form = TextForm()
     blog = get_object_or_404(Blog, slug=slug)
     category = Category.objects.get(id=blog.category.id)
-    related_blogs = category.category_blogs.all()
+    related_blogs = category.category_blogs.all().filter(is_approved=True)
     tags = Tag.objects.order_by('-created_date')[:5]
     # liked_by = request.user in blog.likes.all()
 
@@ -126,7 +133,7 @@ def blog_details(request, slug):
 
 @login_required(login_url='login')
 def add_reply(request, blog_id, comment_id):
-    blog = get_object_or_404(Blog, id=blog_id)
+    blog = get_object_or_404(Blog.filter(is_approved=True), id=blog_id)
     if request.method == "POST":
         form = TextForm(request.POST)
         if form.is_valid():
@@ -141,13 +148,13 @@ def add_reply(request, blog_id, comment_id):
 
 @login_required(login_url='login')
 def my_blogs(request):
-    queryset = request.user.user_blogs.all()
+    queryset = request.user.user_blogs.all().filter(is_approved=True)
     page = request.GET.get('page', 1)
     paginator = Paginator(queryset, 6)
     delete = request.GET.get('delete', None)
 
     if delete:
-        blog = get_object_or_404(Blog, pk=delete)
+        blog = get_object_or_404(Blog.filter(is_approved=True), pk=delete)
         
         if request.user.pk != blog.user.pk:
             return redirect('home')
@@ -175,7 +182,7 @@ def my_blogs(request):
 @login_required(login_url='login')
 def like_blog(request, pk):
     context = {}
-    blog = get_object_or_404(Blog, pk=pk)
+    blog = get_object_or_404(Blog.filter(is_approved=True), pk=pk)
     
     if request.user in blog.likes.all():
         blog.likes.remove(request.user)
@@ -197,9 +204,10 @@ def search_blogs(request):
     if search_key:
         blogs = Blog.objects.filter(
             Q(title__icontains=search_key) |
+            Q(is_approved=True) |
             Q(category__title__icontains=search_key) |
             Q(user__username__icontains=search_key) |
-            Q(tags__title__icontains=search_key)
+            Q(tags__title__icontains=search_key) 
         ).distinct()
 
         context = {
@@ -308,7 +316,7 @@ def update_blog(request, slug):
     return render(request, 'update_blog.html', context)
 
 @login_required(login_url='login')
-def sell_post(request):  
+def add_sell_post(request):  
     sell_form = AddSellPostForm()
 
     if request.method == "POST":
@@ -321,25 +329,8 @@ def sell_post(request):
             sellpost.category = category
             sellpost.save()
 
-            # for tag in tags:
-            #     tag_input = Tag.objects.filter(
-            #         title__iexact=tag.strip(),
-            #         slug= slugify(tag.strip())
-            #     )
-            #     if tag_input.exists():
-            #         t = tag_input.first()
-            #         blog.tags.add(t)
-
-            #     else:
-            #         if tag != '':
-            #             new_tag = Tag.objects.create(
-            #                 title=tag.strip(),
-            #                 slug=slugify(tag.strip())
-            #             )
-            #             blog.tags.add(new_tag)
-
             messages.success(request, "Sell post added successfully")
-            return redirect('home')
+            return redirect('buy_post_details', slug=sellpost.slug)
         else:
             print(sell_form.errors)
 
@@ -347,3 +338,76 @@ def sell_post(request):
         "form": sell_form
     }
     return render(request, 'sell_post.html',context)
+
+def buy_posts_list(request):
+    queryset = Sell_post.objects.order_by('-created_date')
+    # tags = Tag.objects.order_by('-created_date')
+    page = request.GET.get('page', 1)
+    paginator = Paginator(queryset, 4)
+    
+    try:
+        blogs = paginator.page(page)
+    except EmptyPage:
+        blogs = paginator.page(1)
+    except PageNotAnInteger:
+        blogs = paginator.page(1)
+        return redirect('buy_posts_list')
+    
+    context = {
+        "blogs": blogs,
+        # "tags": tags,
+        "paginator": paginator
+    }
+    return render(request, 'buy_posts_list.html', context)
+
+
+def category_buy_posts(request, slug):
+    category = get_object_or_404(Sell_Post_Category, slug=slug)
+    queryset = category.category_sell_post.all()
+    # tags = Tag.objects.order_by('-created_date')[:5]
+    page = request.GET.get('page', 1)
+    paginator = Paginator(queryset, 2)
+    all_blogs = Sell_post.objects.order_by('-created_date')[:5]
+    
+    try:
+        blogs = paginator.page(page)
+    except EmptyPage:
+        blogs = paginator.page(1)
+    except PageNotAnInteger:
+        blogs = paginator.page(1)
+        return redirect('buy_posts_list')
+
+    context = {
+        "blogs": blogs,
+        # "tags": tags,
+        "all_blogs": all_blogs
+    }
+    return render(request, 'category_buy_posts.html', context)
+
+
+def buy_post_details(request, slug):
+    form = TextForm()
+    blog = get_object_or_404(Sell_post, slug=slug)
+    category = Sell_Post_Category.objects.get(id=blog.category.id)
+    related_blogs = category.category_sell_post.all()
+    # tags = Tag.objects.order_by('-created_date')[:5]
+    # liked_by = request.user in blog.likes.all()
+
+    # if request.method == "POST" and request.user.is_authenticated:
+    #     form = TextForm(request.POST)
+    #     if form.is_valid():
+    #         Comment.objects.create(
+    #             user=request.user,
+    #             blog=blog,
+    #             text=form.cleaned_data.get('text')
+    #         )
+    #         return redirect('blog_details', slug=slug)
+
+    context = {
+        "blog": blog,
+        "related_blogs": related_blogs,
+        # "tags": tags,
+        "form": form,
+        # "liked_by": liked_by
+    }
+    return render(request, 'buy_posts_details.html', context)

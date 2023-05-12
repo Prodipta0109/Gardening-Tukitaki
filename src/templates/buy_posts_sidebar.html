@@ -1,0 +1,20 @@
+<div class="col-lg-4">
+    <div class="sidebar">
+      <div class="row">
+        <div class="col-lg-12">
+          <div class="sidebar-item categories">
+            <div class="sidebar-heading">
+              <h2>Categories</h2>
+            </div>
+            <div class="content">
+              <ul>
+                {% for category in sell_categories %}
+                <li><a href="{% url 'category_buy_posts' category.slug %}">- {{category.title}}</a></li>
+                {% endfor %}
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>

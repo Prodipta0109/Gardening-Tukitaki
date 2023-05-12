@@ -60,6 +60,8 @@ class Blog(models.Model):
     banner = models.ImageField(upload_to='blog_banners')
     description = RichTextUploadingField()
     created_date = models.DateField(auto_now_add=True)
+    is_approved = models.BooleanField(default=False)
+    is_featured = models.BooleanField(default=False)
 
     #from Video here
     def save(self, *args, **kwargs):

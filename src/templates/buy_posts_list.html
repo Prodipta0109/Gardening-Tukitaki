@@ -1,5 +1,5 @@
 {% extends 'base.html' %}
-{% block title%} Blogs {% endblock title%}
+{% block title%} Buy Posts {% endblock title%}
 
 {% load static %}
 {% block content %}
@@ -9,8 +9,8 @@
           <div class="col-lg-8">
             <div class="all-blog-posts">
               <div class="row">
-                {% for blog in queryset %}
-                {% include 'blog_card.html' %}
+                {% for blog in blogs %}
+                {% include 'buy_post_card.html' %}
                 {% endfor %}
                 <div class="col-lg-12">
                     {% include 'pagination.html' %}
@@ -18,7 +18,7 @@
               </div>
             </div>
           </div>
-          {% include 'sidebar.html' %}
+          {% include 'buy_posts_sidebar.html' %}
         </div>
       </div>
     </section>

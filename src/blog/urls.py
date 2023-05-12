@@ -14,5 +14,12 @@ urlpatterns = [
     path('my_blogs/', my_blogs, name='my_blogs'),
     path('add_blog/', add_blog, name='add_blog'),
     path('update_blog/<str:slug>/', update_blog, name='update_blog'),
-    path('sell_post/', sell_post, name='sell_post'),
+    path('sell_post/', add_sell_post, name='sell_post'),
+    path('buy_posts_list/', buy_posts_list, name='buy_posts_list'),
+    path('buy_post/<str:slug>/', buy_post_details, name='buy_post_details'),
+    path('category_buy_posts/<str:slug>/',category_buy_posts,name='category_buy_posts')
+    
+    
+    # path('category_buy_posts/<str:slug>/', category_buy_posts, name='category_buy_posts'),
+    # path('buy_post/<str:slug>/', buy_post_details, name='buy_post_details'),
 ]
