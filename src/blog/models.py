@@ -9,7 +9,7 @@ from ckeditor_uploader.fields import RichTextUploadingField
 class Category(models.Model):
     title = models.CharField(max_length=150, unique=True)
     slug = models.SlugField(null=True, blank=True)
-    created_date = models.DateField(auto_now_add=True)
+    created_date = models.DateTimeField(auto_now=True)
 
     def __str__(self) -> str:
         return self.title
@@ -22,7 +22,7 @@ class Category(models.Model):
 class Tag(models.Model):
     title = models.CharField(max_length=150)
     slug = models.SlugField(null=True, blank=True)
-    created_date = models.DateField(auto_now_add=True)
+    created_date = models.DateTimeField(auto_now=True)
 
     def __str__(self) -> str:
         return self.title    
@@ -59,9 +59,14 @@ class Blog(models.Model):
     slug = models.SlugField(null=True, blank=True)
     banner = models.ImageField(upload_to='blog_banners')
     description = RichTextUploadingField()
-    created_date = models.DateField(auto_now_add=True)
+    created_date = models.DateTimeField(auto_now=True)
     is_approved = models.BooleanField(default=False)
     is_featured = models.BooleanField(default=False)
+    is_new = models.BooleanField(default=False)
+    is_updating = models.BooleanField(default=False)
+    
+    class Meta:
+        ordering = ['-created_date']
 
     #from Video here
     def save(self, *args, **kwargs):
@@ -70,6 +75,7 @@ class Blog(models.Model):
 
     def __str__(self) -> str:
         return self.title
+
 
     def save(self, *args, **kwargs):
         updating = self.pk is not None
@@ -94,7 +100,7 @@ class Comment(models.Model):
         on_delete=models.CASCADE
     )
     text = models.TextField()
-    created_date = models.DateTimeField(auto_now_add=True)
+    created_date = models.DateTimeField(auto_now=True)
 
     def __str__(self) -> str:
         return self.text
@@ -112,7 +118,7 @@ class Reply(models.Model):
         on_delete=models.CASCADE
     )
     text = models.TextField()
-    created_date = models.DateTimeField(auto_now_add=True)
+    created_date = models.DateTimeField(auto_now=True)
 
     def __str__(self) -> str:
         return self.text
@@ -121,7 +127,7 @@ class Reply(models.Model):
 class Sell_Post_Category(models.Model):
     title = models.CharField(max_length=150, unique=True)
     slug = models.SlugField(null=True, blank=True)
-    created_date = models.DateField(auto_now_add=True)
+    created_date = models.DateTimeField(auto_now=True)
 
     def __str__(self) -> str:
         return self.title
@@ -149,7 +155,7 @@ class Sell_post(models.Model):
     slug = models.SlugField(null=True, blank=True)
     banner = models.ImageField(upload_to='sell_banners')
     description = RichTextUploadingField()
-    created_date = models.DateField(auto_now_add=True)
+    created_date = models.DateTimeField(auto_now=True)
 
     #from Video here
     def save(self, *args, **kwargs):
