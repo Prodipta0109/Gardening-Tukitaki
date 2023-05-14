@@ -17,7 +17,8 @@ urlpatterns = [
     path('sell_post/', add_sell_post, name='sell_post'),
     path('buy_posts_list/', buy_posts_list, name='buy_posts_list'),
     path('buy_post/<str:slug>/', buy_post_details, name='buy_post_details'),
-    path('category_buy_posts/<str:slug>/',category_buy_posts,name='category_buy_posts')
+    path('category_buy_posts/<str:slug>/',category_buy_posts,name='category_buy_posts'),
+    path('pending_blogs/',pending_blogs,name='pending_blogs')
     
     
     # path('category_buy_posts/<str:slug>/', category_buy_posts, name='category_buy_posts'),

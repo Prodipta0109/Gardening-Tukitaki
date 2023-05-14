@@ -27,16 +27,18 @@ def home(request):
     featured_blogs = Blog.objects.filter(is_featured=True, is_approved=True).order_by('-created_date')
     context = {
         "blogs": blogs,
-        "featured_blogs" : featured_blogs
+        "featured_blogs" : featured_blogs,
+        "tags" : tags
         
     }
     return render(request, 'home.html', context)
 
 def blogs(request):
+    blogs = Blog.objects.filter(is_approved=True).order_by('-created_date')
     queryset = Blog.objects.filter(is_approved=True).order_by('-created_date')
     tags = Tag.objects.order_by('-created_date')
     page = request.GET.get('page', 1)
-    paginator = Paginator(queryset, 4)
+    paginator = Paginator(blogs, 4)
     featured_blogs = Blog.objects.filter(is_featured=True).order_by('-created_date')
     
     try:
@@ -58,10 +60,10 @@ def blogs(request):
 
 def category_blogs(request, slug):
     category = get_object_or_404(Category, slug=slug)
-    queryset = category.category_blogs.all().filter(is_approved=True)
+    blogs = category.category_blogs.all().filter(is_approved=True)
     tags = Tag.objects.order_by('-created_date')[:5]
     page = request.GET.get('page', 1)
-    paginator = Paginator(queryset, 2)
+    paginator = Paginator(blogs, 2)
     all_blogs = Blog.objects.filter(is_approved=True).order_by('-created_date')[:5]
     
     try:
@@ -73,7 +75,7 @@ def category_blogs(request, slug):
         return redirect('blogs')
 
     context = {
-        "blogs": queryset,
+        "blogs": blogs,
         "tags": tags,
         "all_blogs": all_blogs
         
@@ -178,6 +180,39 @@ def my_blogs(request):
     
     return render(request, 'my_blogs.html', context)
 
+@login_required(login_url='login')
+def pending_blogs(request):
+    queryset = request.user.user_blogs.all().filter(is_approved=False)
+    page = request.GET.get('page', 1)
+    paginator = Paginator(queryset, 6)
+    delete = request.GET.get('delete', None)
+
+    if delete:
+        blog = get_object_or_404(Blog.filter(is_approved=False), pk=delete)
+        
+        if request.user.pk != blog.user.pk:
+            return redirect('home')
+
+        blog.delete()
+        messages.success(request, "Your blog has been deleted!")
+        return redirect('pending_blogs')
+
+    try:
+        blogs = paginator.page(page)
+    except EmptyPage:
+        blogs = paginator.page(1)
+    except PageNotAnInteger:
+        blogs = paginator.page(1)
+        return redirect('blogs')
+
+    context = {
+        "blogs": blogs,
+        "paginator": paginator,
+        "queryset" : queryset
+    }
+    
+    return render(request, 'pending_blogs.html', context)
+
 #to check branches
 @login_required(login_url='login')
 def like_blog(request, pk):
@@ -236,6 +271,7 @@ def add_blog(request):
             blog = form.save(commit=False)
             blog.user = user
             blog.category = category
+            blog.is_new = True
             blog.save()
 
             for tag in tags:
@@ -284,6 +320,10 @@ def update_blog(request, slug):
             blog = form.save(commit=False)
             blog.user = user
             blog.category = category
+            blog.is_approved = False
+            blog.is_featured = False
+            blog.is_new = False
+            blog.is_updating = True
             blog.save()
 
             for tag in tags:
@@ -304,6 +344,7 @@ def update_blog(request, slug):
                         blog.tags.add(new_tag)
 
             messages.success(request, "Blog updated successfully")
+            
             return redirect('blog_details', slug=blog.slug)
         else:
             print(form.errors)

@@ -1,4 +1,4 @@
-<div class="col-lg-4">
+{% comment %} <div class="col-lg-4">
   <div class="sidebar">
     <div class="row">
       <div class="col-lg-12">
@@ -49,3 +49,96 @@
     </div>
   </div>
 </div>
+ {% endcomment %}
+
+ <style>
+  /* Define border styles */
+  .sidebar-item .content {
+    border-radius: 8px;
+    background-color: #fdfdfd;
+    padding: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    background-image: linear-gradient(to bottom, #ffe6e6 0%, #ffe6e6 100%);
+  }
+  
+  .sidebar-heading h2 {
+    color: #fff;
+    font-size: 18px;
+    margin-bottom: 10px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+  
+  .content ul {
+    padding-left: 20px;
+  }
+  
+  .content ul li {
+    margin-bottom: 8px;
+  }
+  
+  .content ul li a {
+    color: #555;
+    text-decoration: none;
+    transition: color 0.3s ease;
+  }
+  
+  .content ul li a:hover {
+    color: #333;
+  }
+</style>
+
+<div class="col-lg-4">
+  <div class="sidebar">
+    <div class="row">
+      <div class="col-lg-12">
+        <div class="sidebar-item recent-posts">
+          <div class="sidebar-heading">
+            <h2>Recent Posts</h2>
+          </div>
+          <div class="content">
+            <ul>
+              {% for blog in blogs|slice:"3" %}
+              <li><a href="{% url 'blog_details' blog.slug%}">
+                <h5>{{blog.title}}</h5>
+                <span>{{blog.created_date}}</span>
+              </a></li>
+              {% endfor %}
+            </ul>
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-12">
+        <div class="sidebar-item categories">
+          <div class="sidebar-heading">
+            <h2>Categories</h2>
+          </div>
+          <div class="content">
+            <ul>
+              {% for category in categories|slice:"3" %}
+              <li><a href="{% url 'category_blogs' category.slug %}">- {{category.title}}</a></li>
+              {% endfor %}
+            </ul>
+            
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-12">
+        <div class="sidebar-item tags">
+          <div class="sidebar-heading">
+            <h2>Tag Clouds</h2>
+          </div>
+          <div class="content">
+            <ul>
+              {% for tag in tags %}
+              <li><a href="{% url 'tag_blogs' tag.slug %}">{{tag.title}}</a></li>
+              {% endfor %}
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
