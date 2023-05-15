@@ -294,7 +294,15 @@
                               alert("Please fill up all the fields.");
                               return false;
                             }
-                            volume = length*width*depth;
+                            volume = (length*width*depth*375)/1000000;
+                            soil= volume/1.67
+                            tsp = (100/50)*volume
+                            mop = (75/50)*volume
+                            urea = (100/50)*volume
+                            manure = soil*.5
+                            vermi_compost = (15/50)*volume
+                            gypsum = (5/50)*volume
+
                           }
                           else if(shape == "square"){
                             const length = document.getElementById("s_length").value;
@@ -303,7 +311,14 @@
                               alert("Please fill up all the fields.");
                               return false;
                             }
-                            volume = length*length*depth;
+                            volume = (length*length*depth*375)/1000000;
+                            soil= volume/1.67
+                            tsp = (100/50)*volume
+                            mop = (75/50)*volume
+                            urea = (100/50)*volume
+                            manure = soil*.5
+                            vermi_compost = (15/50)*volume
+                            gypsum = (5/50)*volume
                           }
                           else if(shape == "circle"){
                             const radius = document.getElementById("radius").value;
@@ -312,7 +327,14 @@
                               alert("Please fill up all the fields.");
                               return false;
                             }
-                            volume = 3.1416*radius*radius*height;
+                            volume = (3.1416*radius*radius*height*25)/100000;
+                            soil= volume/1.67
+                            tsp = (100/50)*volume
+                            mop = (75/50)*volume
+                            urea = (100/50)*volume
+                            manure = soil*.5
+                            vermi_compost = (15/50)*volume
+                            gypsum = (5/50)*volume
                           }
                           
                           
@@ -334,31 +356,31 @@
                                         <table border="2">
                                             <tr>
                                                 <td>Soil(kg)</td>
-                                                <td>${volume}</td>
+                                                <td>${soil}</td>
                                             </tr>
                                             <tr>
                                               <td>TSP(gm)</td>
-                                              <td>100</td>
+                                              <td>${tsp}</td>
                                             </tr>
                                             <tr>
                                               <td>Urea(gm)</td>
-                                              <td>100</td>
+                                              <td>${urea}</td>
                                             </tr>
                                             <tr>
                                               <td>MOP(gm)</td>
-                                              <td>75</td>
+                                              <td>${mop}</td>
                                             </tr>
                                             <tr>
                                               <td>Manure(kg)</td>
-                                              <td>50%</td>
+                                              <td>${manure}</td>
                                             </tr>
                                             <tr>
                                               <td>Vermi-compost(kg)</td>
-                                              <td>5</td>
+                                              <td>${vermi_compost}</td>
                                             </tr>
                                             <tr>
                                               <td>Gypsum(kg)</td>
-                                              <td>5</td>
+                                              <td>${gypsum}</td>
                                             </tr>
                                         </table>
                                     </td>
@@ -366,19 +388,19 @@
                                         <table border = "2">
                                           <tr>
                                             <td>Soil(kg)</td>
-                                            <td>1</td>
+                                            <td>${volume*.3}</td>
                                           </tr>
                                           <tr>
                                             <td>Manure(kg)</td>
-                                            <td>1</td>
+                                            <td>${volume*.3}</td>
                                           </tr>
                                           <tr>
                                             <td>Vermi-compost(kg)</td>
-                                            <td>1</td>
+                                            <td>${volume*.3}</td>
                                           </tr>
                                           <tr>
                                             <td>Coco-dust</td>
-                                            <td>1</td>
+                                            <td>${volume*.3}</td>
                                           </tr>
                                         </table>
                                     </td>
@@ -420,6 +442,18 @@
                           if (isNaN(pH) || pH < 0 || pH > 14) {
                             alert("Please enter a pH value between 0 and 14.");
                             return;
+                          }
+                          else if (pH > 8.5) {
+                            document.getElementById("result").style.display = "block";
+                            document.getElementById("result").innerHTML = "<div class='animation'>Too alkaline for most of the plants!! Get rid of the soil!!!</div>";
+                          }
+                          else if (pH > 7.5 && pH <= 8.5) {
+                            document.getElementById("result").style.display = "block";
+                            document.getElementById("result").innerHTML = "<div class='animation'>Iron availability will be a problem in this soil</div>";
+                          }
+                          else if (pH > 6.5 && pH <= 7.5) {
+                            document.getElementById("result").style.display = "block";
+                            document.getElementById("result").innerHTML = "<div class='animation'>ph score is very good and your soil is perfectly neutral. Keep the good work!</div>";
                           }
                           else if (pH > 5.5 && pH <= 6.5) {
                             document.getElementById("result").style.display = "block";

@@ -6,19 +6,23 @@ from .slugs import generate_unique_slug
 from ckeditor.fields import RichTextField
 from ckeditor_uploader.fields import RichTextUploadingField
 from django.db.models import Count
+from django.utils import timezone
 
 
 
 class Category(models.Model):
     title = models.CharField(max_length=150, unique=True)
     slug = models.SlugField(null=True, blank=True)
-    created_date = models.DateTimeField(auto_now=True)
+    # created_date = models.DateTimeField(auto_now=True)
+    
+    created_date = models.DateTimeField()
 
     def __str__(self) -> str:
         return self.title
 
     def save(self, *args, **kwargs):
         self.slug = slugify(self.title)
+        self.created_date = timezone.now() + timezone.timedelta(hours=6)
         super().save(*args, **kwargs)
 
 
@@ -27,11 +31,14 @@ class Tag(models.Model):
     slug = models.SlugField(null=True, blank=True)
     created_date = models.DateTimeField(auto_now=True)
     is_approved = models.BooleanField(default=False)
+    
+    created_date = models.DateTimeField()
 
     def __str__(self) -> str:
         return self.title    
 
     def save(self, *args, **kwargs):
+        self.created_date = timezone.now() + timezone.timedelta(hours=6)
         self.slug = slugify(self.title)
         super().save(*args, **kwargs)
         
@@ -66,11 +73,20 @@ class Blog(models.Model):
     slug = models.SlugField(null=True, blank=True)
     banner = models.ImageField(upload_to='blog_banners')
     description = RichTextUploadingField()
-    created_date = models.DateTimeField(auto_now=True)
+    # created_date = models.DateTimeField(auto_now=True)
     is_approved = models.BooleanField(default=False)
     is_featured = models.BooleanField(default=False)
     is_new = models.BooleanField(default=False)
     is_updating = models.BooleanField(default=False)
+    
+    
+    # utc_time = timezone.now()
+    # gmt_plus_six = utc_time + timezone.timedelta(hours=6)
+    # created_date = models.DateTimeField(default=gmt_plus_six)
+    
+    created_date = models.DateTimeField()
+
+
     #comments = models.ManyToManyField("Comment")
     
     class Meta:
@@ -79,6 +95,7 @@ class Blog(models.Model):
     #from Video here
     def save(self, *args, **kwargs):
         self.slug = slugify(self.title)
+        self.created_date = timezone.now() + timezone.timedelta(hours=6)
         super().save(*args, **kwargs)
 
     def __str__(self) -> str:
@@ -89,9 +106,11 @@ class Blog(models.Model):
         updating = self.pk is not None
         
         if updating:
+            self.created_date = timezone.now() + timezone.timedelta(hours=6)
             self.slug = generate_unique_slug(self, self.title, update=True)
             super().save(*args, **kwargs)
         else:
+            self.created_date = timezone.now() + timezone.timedelta(hours=6)
             self.slug = generate_unique_slug(self, self.title)
             super().save(*args, **kwargs)
 
@@ -108,7 +127,12 @@ class Comment(models.Model):
         on_delete=models.CASCADE
     )
     text = models.TextField()
-    created_date = models.DateTimeField(auto_now=True)
+    # created_date = models.DateTimeField(auto_now=True)
+    created_date = models.DateTimeField()
+    
+    def save(self, *args, **kwargs):
+        self.created_date = timezone.now() + timezone.timedelta(hours=6)
+        super().save(*args, **kwargs)
 
     def __str__(self) -> str:
         return self.text
@@ -126,7 +150,13 @@ class Reply(models.Model):
         on_delete=models.CASCADE
     )
     text = models.TextField()
-    created_date = models.DateTimeField(auto_now=True)
+    # created_date = models.DateTimeField(auto_now=True)
+    
+    created_date = models.DateTimeField()
+    
+    def save(self, *args, **kwargs):
+        self.created_date = timezone.now() + timezone.timedelta(hours=6)
+        super().save(*args, **kwargs)
 
     def __str__(self) -> str:
         return self.text
@@ -135,12 +165,15 @@ class Reply(models.Model):
 class Sell_Post_Category(models.Model):
     title = models.CharField(max_length=150, unique=True)
     slug = models.SlugField(null=True, blank=True)
-    created_date = models.DateTimeField(auto_now=True)
+    # created_date = models.DateTimeField(auto_now=True)
+    
+    created_date = models.DateTimeField()
 
     def __str__(self) -> str:
         return self.title
 
     def save(self, *args, **kwargs):
+        self.created_date = timezone.now() + timezone.timedelta(hours=6)
         self.slug = slugify(self.title)
         super().save(*args, **kwargs)
 # Create your models here.
@@ -167,8 +200,11 @@ class Sell_post(models.Model):
     slug = models.SlugField(null=True, blank=True)
     banner = models.ImageField(upload_to='sell_banners')
     description = RichTextUploadingField()
-    created_date = models.DateTimeField(auto_now=True)
-    created_date = models.DateTimeField(auto_now=True)
+    # created_date = models.DateTimeField(auto_now=True)
+    # created_date = models.DateTimeField(auto_now=True)
+    
+    created_date = models.DateTimeField()
+    
     is_approved = models.BooleanField(default=False)
     is_featured = models.BooleanField(default=False)
     is_new = models.BooleanField(default=False)
@@ -179,6 +215,7 @@ class Sell_post(models.Model):
 
     #from Video here
     def save(self, *args, **kwargs):
+        self.created_date = timezone.now() + timezone.timedelta(hours=6)
         self.slug = slugify(self.title)
         super().save(*args, **kwargs)
 
@@ -189,9 +226,11 @@ class Sell_post(models.Model):
         updating = self.pk is not None
         
         if updating:
+            self.created_date = timezone.now() + timezone.timedelta(hours=6)
             self.slug = generate_unique_slug(self, self.title, update=True)
             super().save(*args, **kwargs)
         else:
+            self.created_date = timezone.now() + timezone.timedelta(hours=6)
             self.slug = generate_unique_slug(self, self.title)
             super().save(*args, **kwargs)
             

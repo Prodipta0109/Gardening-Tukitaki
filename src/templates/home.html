@@ -51,7 +51,7 @@
                           <li><a href="#">{{blog.created_date}}</a></li>
                           <li><a href="#">{{blog.blog_comments.all.count}}</a></li>
                         </ul>
-                        <p>{{blog.description|truncatewords:30|safe}}</p>
+                        {{blog.description|truncatewords:30|safe}}
                         <div class="post-options">
                           <div class="row">
                             <div class="col-6">

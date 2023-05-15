@@ -31,9 +31,9 @@
           <li><a href="#">{{blog.created_date}}</a></li>
           <li><a href="#">{{blog.blog_comments.all.count}} Comments</a></li>
         </ul>
-        <p>
+        
           {{blog.description|truncatewords:20|safe}}
-        </p>
+        
         <div class="post-options">
           <div class="row">
             <div class="col-lg-12">
