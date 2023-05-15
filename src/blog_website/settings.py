@@ -38,6 +38,7 @@ INSTALLED_APPS = [
     'gardening_calculator',
     'ckeditor',
     'ckeditor_uploader',
+    'notification',
 
 #pre installed apps
     'django.contrib.admin',
@@ -74,7 +75,8 @@ TEMPLATES = [
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
                 'blog.context-processors.get_all_categories',
-                'blog.context-processors.get_all_sell_categories'
+                'blog.context-processors.get_all_sell_categories',
+                'user_profile.context_processors.user_notifications'
             ],
         },
     },
@@ -146,3 +148,8 @@ CKEDITOR_UPLOAD_PATH = 'uploads/'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 AUTH_USER_MODEL = 'user_profile.User'
+
+AUTHENTICATION_BACKENDS = (
+    "user_profile.backends.EmailAuthenticationBackend",
+    "django.contrib.auth.backends.ModelBackend"
+)

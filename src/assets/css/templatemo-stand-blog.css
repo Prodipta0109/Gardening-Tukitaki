@@ -30,7 +30,7 @@ h1,h2,h3,h4,h5,h6 {
 
 .main-button a {
 	display: inline-block;
-	background-color: #4aa44a;
+	background-color: #268FB8;
 	color: #fff;
 	font-size: 13px;
 	font-weight: 500;
@@ -650,7 +650,7 @@ ul.page-numbers li a:hover {
 
 .blog-posts .submit-comment button {
 	display: inline-block;
-	background-color: #0F8C0F;
+	background-color: #268FB8;
 	color: #fff;
 	font-size: 13px;
 	font-weight: 500;

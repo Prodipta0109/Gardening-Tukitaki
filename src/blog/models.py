@@ -64,6 +64,7 @@ class Blog(models.Model):
     is_featured = models.BooleanField(default=False)
     is_new = models.BooleanField(default=False)
     is_updating = models.BooleanField(default=False)
+    #comments = models.ManyToManyField("Comment")
     
     class Meta:
         ordering = ['-created_date']

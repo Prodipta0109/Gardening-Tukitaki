@@ -135,7 +135,7 @@ def blog_details(request, slug):
 
 @login_required(login_url='login')
 def add_reply(request, blog_id, comment_id):
-    blog = get_object_or_404(Blog.filter(is_approved=True), id=blog_id)
+    blog = get_object_or_404(Blog, id=blog_id)
     if request.method == "POST":
         form = TextForm(request.POST)
         if form.is_valid():
@@ -217,7 +217,7 @@ def pending_blogs(request):
 @login_required(login_url='login')
 def like_blog(request, pk):
     context = {}
-    blog = get_object_or_404(Blog.filter(is_approved=True), pk=pk)
+    blog = get_object_or_404(Blog, pk=pk)
     
     if request.user in blog.likes.all():
         blog.likes.remove(request.user)

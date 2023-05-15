@@ -25,7 +25,7 @@
 
 .reply-button {
     display: inline-block;
-    background-color: #00FF00;
+    background-color: #268FB8;
     color: #fff;
     font-size: 13px;
     font-weight: 500;
@@ -53,7 +53,7 @@
 
 .btn-primary {
     display: inline-block;
-    background-color: #00FF00;
+    background-color: #268FB8;
     color: #fff;
     font-size: 13px;
     font-weight: 500;
@@ -89,4 +89,10 @@ input, textarea {
 
 .owl-carousel .owl-item img {
     height: 440px !important;
+}
+
+.form-control {
+    border: 2px solid #ccc;
+    border-radius: 5px;
+    padding: 10px;
 }

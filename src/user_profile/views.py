@@ -16,6 +16,7 @@ from .decorators import(
 )
 
 from .models import User
+from notification.models import Notification
 
 
 # Create your views here.
@@ -111,4 +112,17 @@ def change_profile_picture(request):
             print(form.errors)
 
     return redirect('profile')
+
+@login_required(login_url='login')
+def user_notifications(request):
+    notifications = Notification.objects.filter(
+        user=request.user,
+        is_seen=False
+    )
+
+    for notification in notifications:
+        notification.is_seen = True
+        notification.save()
+        
+    return render(request, 'notifications.html')
 

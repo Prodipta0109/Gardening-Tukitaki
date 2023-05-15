@@ -5,10 +5,10 @@
 {% block content %}
 
 <section class="profile">
-        <div class="container-fluid">
+        <div class="container-fluid py-4 pl-5 pr-5">
             <div class="row py-5">
-                <div class="col-md-4">
-                    <div class="text-center">
+                <div class="col-md-4" style="background-color: #ffffc2">
+                    <div class="text-center pt-5">
                         <img class="rounded rounded-circle profile-picture" src="{{request.user.get_profile_picture}}" alt="">
                         <ul class="text-center py-3">
                             <li class="py-2">
@@ -70,7 +70,8 @@
                         </li>
                     </ul>
                 </div>
-                <div class="col-md-8">
+  
+                <div class="col-md-8 p-3" style="background-color: #ffffd2">
                     <form class="px-4" action="{% url 'profile' %}" method="POST">
                         {% csrf_token %}
                         {% if messages %}
@@ -120,6 +121,7 @@
                         </div>
                     </form>
                 </div>
+  
             </div>
         </div>
 </section>
