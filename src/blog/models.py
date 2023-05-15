@@ -5,6 +5,9 @@ from user_profile.models import User
 from .slugs import generate_unique_slug
 from ckeditor.fields import RichTextField
 from ckeditor_uploader.fields import RichTextUploadingField
+from django.db.models import Count
+
+
 
 class Category(models.Model):
     title = models.CharField(max_length=150, unique=True)
@@ -23,6 +26,7 @@ class Tag(models.Model):
     title = models.CharField(max_length=150)
     slug = models.SlugField(null=True, blank=True)
     created_date = models.DateTimeField(auto_now=True)
+    is_approved = models.BooleanField(default=False)
 
     def __str__(self) -> str:
         return self.title    
@@ -30,6 +34,9 @@ class Tag(models.Model):
     def save(self, *args, **kwargs):
         self.slug = slugify(self.title)
         super().save(*args, **kwargs)
+        
+    class Meta:
+        ordering = ['-created_date']
 
 
 class Blog(models.Model):
@@ -152,10 +159,22 @@ class Sell_post(models.Model):
     title = models.CharField(
         max_length=250
     )
+    number = models.CharField(
+        max_length=11,
+        default='Not Given'
+    )
     slug = models.SlugField(null=True, blank=True)
     banner = models.ImageField(upload_to='sell_banners')
     description = RichTextUploadingField()
     created_date = models.DateTimeField(auto_now=True)
+    created_date = models.DateTimeField(auto_now=True)
+    is_approved = models.BooleanField(default=False)
+    is_featured = models.BooleanField(default=False)
+    is_new = models.BooleanField(default=False)
+    is_updating = models.BooleanField(default=False)
+    
+    class Meta:
+        ordering = ['-created_date']
 
     #from Video here
     def save(self, *args, **kwargs):
@@ -174,3 +193,6 @@ class Sell_post(models.Model):
         else:
             self.slug = generate_unique_slug(self, self.title)
             super().save(*args, **kwargs)
+            
+            
+    

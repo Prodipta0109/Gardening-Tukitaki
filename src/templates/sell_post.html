@@ -31,15 +31,15 @@
                         <p class="text-danger py-1">{{form.description.errors}}</p>
                     </div>
                     <div class="form-group">
+                        <label for="number">Phone Number</label>
+                        <input class="form-control" type="text" name="number">
+                        <p class="text-danger py-1">{{form.number.errors}}</p>
+                    </div>
+                    <div class="form-group">
                         <label for="title">Banner</label>
                         <input class="form-control" class="form-control" type="file" name="banner">
                         <p class="text-danger py-1">{{form.banner.errors}}</p>
                     </div>
-                    {% comment %} <div class="form-group">
-                        <label for="title">Tags</label>
-                        <textarea class="form-control" name="tags" id="" cols="30" rows="10" placeholder="enter comma seprrated values"></textarea>
-                        <p class="text-danger py-1">{{form.tags.errors}}</p> 
-                    </div> {% endcomment %}
                     <div class="form-group my-2">
                         <button type="submit" class="btn btn-primary btn-block">Add</button>
                     </div>

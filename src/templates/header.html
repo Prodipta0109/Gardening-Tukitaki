@@ -174,6 +174,7 @@
 
 
 <!-- Here is the 2nd code given by chatgpt -->
+{% load static %}
 
 <header class="wave-header p-0">
   <style>
@@ -199,6 +200,7 @@
       transform-origin: bottom center;
       transform: skewY(0deg);
     }
+
     .wave-header .navbar {
       position: relative;
       z-index: 1;
@@ -278,7 +280,7 @@
         </ul>
       </div>
 
-      <a class="navbar-brand " href="{% url 'home' %}"><h1>Gardening Tukitaki<br></h1> <p class="text-right"><h7>Now green is in your own hands</h7></p></a>
+      <a class="navbar-brand " href="{% url 'home' %}"><h1><img src="{% static 'images/ll.png' %}" alt="Error" width="120" height = "65">&nbspGardening Tukitaki<br></h1><p class="text-right"><h7>Now green is in your own hands</h7></p></a>
       {% comment %} <a class="navbar-brand text-info" href="index.html">
         <img src="Garden.webp" alt="Gardening Tukitaki Logo" width="10px", length="5px">
         <p class="text-success"><h7>Now green is in your own hands</h7></p>

@@ -31,6 +31,7 @@ class AddSellPostForm(forms.ModelForm):
             "title",
             "category",
             "banner",
-            "description"
+            "description",
+            "number"
         ) 
         
