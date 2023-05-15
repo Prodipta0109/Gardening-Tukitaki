@@ -206,7 +206,6 @@ class Sell_post(models.Model):
     created_date = models.DateTimeField()
     
     is_approved = models.BooleanField(default=False)
-    is_featured = models.BooleanField(default=False)
     is_new = models.BooleanField(default=False)
     is_updating = models.BooleanField(default=False)
     

@@ -73,6 +73,7 @@ def category_blogs(request, slug):
     page = request.GET.get('page', 1)
     paginator = Paginator(blogs, 2)
     all_blogs = Blog.objects.filter(is_approved=True).order_by('-created_date')[:5]
+    popular_blogs = Blog.objects.annotate(num_likes=Count('likes')).order_by('-num_likes','-created_date')
     
     try:
         blogs = paginator.page(page)
@@ -85,7 +86,8 @@ def category_blogs(request, slug):
     context = {
         "blogs": blogs,
         "tags": tags,
-        "all_blogs": all_blogs
+        "all_blogs": all_blogs,
+        "popular_blogs" : popular_blogs
         
     }
     return render(request, 'category_blogs.html', context)
@@ -98,6 +100,7 @@ def tag_blogs(request, slug):
     page = request.GET.get('page', 1)
     paginator = Paginator(queryset, 2)
     all_blogs = Blog.objects.filter(is_approved=True).order_by('-created_date')[:5]
+    popular_blogs = Blog.objects.annotate(num_likes=Count('likes')).order_by('-num_likes','-created_date')
     
     try:
         blogs = paginator.page(page)
@@ -110,7 +113,8 @@ def tag_blogs(request, slug):
     context = {
         "blogs": blogs,
         "tags": tags,
-        "all_blogs": all_blogs
+        "all_blogs": all_blogs,
+        "popular_blogs" : popular_blogs
     }
     return render(request, 'category_blogs.html', context)
 
@@ -270,6 +274,7 @@ def search_blogs(request):
     search_key = request.GET.get('search', None)
     recent_blogs = Blog.objects.filter(is_approved=True).order_by('-created_date')
     tags = Tag.objects.filter(is_approved=True).order_by('-created_date')
+    popular_blogs = Blog.objects.annotate(num_likes=Count('likes')).order_by('-num_likes','-created_date')
     
     if search_key:
         blogs = Blog.objects.filter(
@@ -283,7 +288,8 @@ def search_blogs(request):
             "blogs": blogs,
             "recent_blogs": recent_blogs,
             "tags": tags,
-            "search_key": search_key
+            "search_key": search_key,
+            "popular_blogs": popular_blogs
         }
 
         return render(request, 'search.html', context)
@@ -325,7 +331,7 @@ def add_blog(request):
                         )
                         blog.tags.add(new_tag)
                         
-            messages.success(request, "Blog added successfully")
+            messages.success(request, "Blog added successfully and in the pending blogs section for admin approval")
             return redirect('pending_blog_details', slug=blog.slug)
            
         else:
@@ -385,7 +391,7 @@ def update_blog(request, slug):
                         )
                         blog.tags.add(new_tag)
 
-            messages.success(request, "Blog updated successfully")
+            messages.success(request, "Blog updated successfully and in the pending blogs section for admin approval")
             return redirect('pending_blog_details', slug=blog.slug)
         else:
             print(form.errors)
@@ -409,9 +415,10 @@ def add_sell_post(request):
             sellpost = sell_form.save(commit=False)
             sellpost.user = user
             sellpost.category = category
+            sellpost.is_new = True
             sellpost.save()
 
-            messages.success(request, "Sell post added successfully")
+            messages.success(request, "Sell post added successfully and in the pending sell posts section for admin approval")
             return redirect('pending_sell_posts_details', slug=sellpost.slug)
         else:
             print(sell_form.errors)
@@ -632,7 +639,7 @@ def update_sell_post(request, slug):
             #             )
             #             blog.tags.add(new_tag)
 
-            messages.success(request, "Sell post updated successfully")
+            messages.success(request, "Sell post updated successfully and in the pending blogs section for admin approval")
             return redirect('buy_post_details', slug=blog.slug)
         else:
             print(form.errors)
