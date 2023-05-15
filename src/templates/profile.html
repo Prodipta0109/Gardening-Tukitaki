@@ -14,21 +14,46 @@
                             <li class="py-2">
                                 <span>Posts: <strong>{{account.user_blogs.count}}</strong></span>
                             </li>
-                            <li class="py-2">
+                            {% comment %} <li class="py-2">
                                 <span>Follwers: <strong>{{account.followers.all.count}}</strong></span>
                             </li>
                             <li class="py-2">
                                 <span>Following: <strong>{{account.user_follows.all.count}}</strong></span>
-                            </li>
+                            </li> {% endcomment %}
                         </ul>
                     </div>
-                    <div class="text-center pt-2 pb-1">
+                    <div class="text-center pt-3 pb-1">
                     <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
                         Update Profile Picture
                     </button>
                     
                     <!-- Modal -->
+                    <br>
                     <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                        <div class="modal-dialog" role="document" style="margin-top: 150px;">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="exampleModalLabel">Update Profile Picture</h5>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                                <div class="modal-body">
+                                    <form method="POST" action="{% url 'change_profile_picture' %}" enctype="multipart/form-data">
+                                        {% csrf_token %}
+                                        <div class="form-group">
+                                            <input class="form-control" type="file" name="profile_image" required>
+                                        </div>
+                                        <div class="form-group">
+                                            <button type="submit" class="btn btn-primary">Save changes</button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    {% comment %} <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
                         <div class="modal-dialog" role="document">
                         <div class="modal-content">
                             <div class="modal-header">
@@ -50,7 +75,7 @@
                             </div>
                         </div>
                         </div>
-                    </div>
+                    </div> {% endcomment %}
                     </div>
                     <ul class="list-group text-center mt-2 mb-5">
                         <li class="list-group-item my-1">
@@ -122,7 +147,7 @@
                         </div>
                         <div class="form-group">
                             <label for="username">Username</label>
-                            <input class="form-control" name="username"  value="{{account.username}}" type="text">
+                            <input class="form-control" name="username"  value="{{account.username}}" type="text" readonly>
                             <p class="text-danger error py-1">{{form.username.errors}}</p>
                         </div>
                         <div class="form-group">
