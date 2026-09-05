@@ -1,6 +1,2 @@
 # Gardening-Tukitaki
-website using django and bootstrap
-
-Live Website --->>
-
-http://gardeningtukitaki.pythonanywhere.com/
+A blog and e-commerce platform for gardening and agriculture enthusiasts.
